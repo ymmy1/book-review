@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    {% if message %}
+        <div class="alert alert-danger" role="alert">
+        {{ message }}
+        </div>
+    {% else %}
+    <h2>Choose any of our 5000 books to rate!</h2>
+    <div class="feed">
+        <div class="row">
+            {% for row in row1 %}
+                <div class="post col">
+                    <a href="/{{ row['id'] }}" class="post_link">
+                        <div class="post_image">
+                            <img src="https://covers.openlibrary.org/b/ISBN/{{ row['isbn'] }}-M.jpg" class="img-thumbnail" alt="{{ row['title'] }}">
+                        </div>
+                        <div class="post_info">
+                            <h5> {{ row['title'] }}</h5>
+                            <p>By {{ row['author'] }}</p>
+                            <p>Year: {{ row['year'] }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for row in row2 %}
+                <div class="post col">
+                    <a href="/{{ row['id'] }}" class="post_link">
+                        <div class="post_image">
+                            <img src="https://covers.openlibrary.org/b/ISBN/{{ row['isbn'] }}-M.jpg" class="img-thumbnail" alt="{{ row['title'] }}">
+                        </div>
+                        <div class="post_info">
+                            <h5> {{ row['title'] }}</h5>
+                            <p>By {{ row['author'] }}</p>
+                            <p>Year: {{ row['year'] }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
