@@ -1,5 +1,17 @@
-requests
+certifi
+chardet
+Click
 Flask
 Flask-Session
-psycopg2-binary
+idna
+itsdangerous
+Jinja2
+MarkupSafe
+requests
 SQLAlchemy
+urllib3
+Werkzeug
+
+# Heroku
+psycopg2
+gunicorn
