@@ -2,7 +2,7 @@ import os
 
 import requests
 
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, flash
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -38,29 +38,21 @@ db.commit()
 @app.route("/")
 @login_required
 def index():
-    # Nickname top right corner
-    rows = db.execute("SELECT * FROM users WHERE (id = :id)",
-                            {"id": session["user_id"]}).fetchall()
-    nickname_live = rows[0]["nickname"]
-
+    
     # Random books
     row1 = db.execute("SELECT * FROM books WHERE random() < 0.01 limit 5;").fetchall()
     row2 = db.execute("SELECT * FROM books WHERE random() < 0.01 limit 5;").fetchall()
 
-    return render_template("index.html", nickname=nickname_live, row1=row1, row2=row2) 
+    return render_template("index.html",  row1=row1, row2=row2) 
 
 @app.route("/<int:id>")
 def book(id):
-    # Nickname top right corner + book info
-    rows = db.execute("SELECT * FROM users WHERE (id = :id)", {"id": session["user_id"]}).fetchall()
-    nickname_live = rows[0]["nickname"]
-    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": id}).fetchone()
-    
+        
     # error handling
     if not book:
-        return render_template("index.html", nickname=nickname_live, message="404. No such book with this ID :(")
+        return render_template("index.html",  message="404. No such book with this ID :(")
 
-    return render_template("book_info.html", nickname=nickname_live, book=book)
+    return render_template("book_info.html",  book=book)
     
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -91,6 +83,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["user_nickname"] = rows[0]["nickname"]
 
 
         # Redirect user to home page
@@ -138,14 +131,8 @@ def register():
                 {"username": username, "nickname": nickname, "password": password})
     db.commit()
 
-
-    rows = db.execute("SELECT * FROM users WHERE username = username").fetchall()
-
-    # Remember which user has logged in
-    session["user_id"] = rows[0]["id"]
-
-    # Redirect user to home page
-    return redirect("/")
+    # Redirect user to login page
+    return redirect("/login")
 
 @app.route("/logout")
 def logout():
@@ -159,10 +146,6 @@ def logout():
 
 @app.route("/search", methods=["POST"])
 def search():
-    # setting up nickname
-    rows = db.execute("SELECT * FROM users WHERE (id = :id)",
-                            {"id": session["user_id"]}).fetchall()
-    nickname_live = rows[0]["nickname"]
     # requesting the text from search
     message = request.form.get("search")
     message = "".join(("%", message, "%"))
@@ -172,4 +155,4 @@ def search():
 
     # Total number of books
     total = int(len(t_search)) + int(len(a_search))
-    return render_template("search.html", nickname=nickname_live,  t_search=t_search, a_search=a_search, total=total)
+    return render_template("search.html",   t_search=t_search, a_search=a_search, total=total)
