@@ -94,3 +94,215 @@ footer
         font-size: 15px;
     }
 }
+
+.book_info
+{
+    display: flex;
+    &-image
+    {
+        width: 350px;
+        margin-right: 20px;
+        img
+        {
+            width: 100%;
+        }
+    }
+    &-heading
+    {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        .rating-top
+        {
+            font-size: 1.5em;
+            display: inline-block;
+        }
+    }
+    &-reviews
+    {
+        -webkit-box-shadow: 0px 15px 31px -6px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 15px 31px -6px rgba(0,0,0,0.75);
+        box-shadow: 0px 15px 31px -6px rgba(0,0,0,0.75);
+        margin-top: 20px;
+        border: 1px solid rgb(244, 241, 234);
+        margin-bottom: 30px;
+        h5
+        {
+            font-size: 1em;
+            background: rgb(244, 241, 234);
+            color: rgb(88, 55, 31);
+            margin-bottom: 0;
+        }
+    }
+}
+
+.review_area
+{
+    display: flex;
+    flex-direction: column;
+    
+    background: rgba(255,255,255,0.9);
+    
+
+    &-post
+    {
+        display: flex;
+        margin-bottom: 10px;
+        justify-content: space-between;
+        .left-part
+        {
+            display: flex;
+            .name
+            {
+                display: flex;
+                flex-direction: column;
+                text-align: right;
+            }
+            .text
+            {
+                margin-left: 10px;
+                text-align: left;
+                width: 365px;
+                
+            }
+        }
+        .time
+        {
+            width: 190px;
+            font-size: 0.7em;
+        }
+    }
+}
+
+.text-area
+{
+    form
+    {
+        display: flex;
+        margin-left: 0;
+        .inputs
+        {
+            margin-left: 5px;
+            .btn
+            {
+                margin-left: 5px;
+                height: calc(2.25rem + 2px);
+                background: rgb(244, 241, 234);
+                color: rgb(88, 55, 31);
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+// Stars Static
+:root
+{
+    --star-size: 40px;
+    --star-size2: 30px;
+    --star-color: rgb(194, 194, 194);
+    --star-background: #fc0;
+}
+
+.Stars
+{
+    --percent: calc(var(--rating) / 5 * 100%);
+
+    display: inline-block;
+    font-size: var(--star-size);
+    font-family: Times; // make sure ★ appears correctly
+    line-height: 1;
+
+    &::before 
+    {
+        content: '★★★★★';
+        letter-spacing: 3px;
+        background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
+
+.Stars2 {
+    --percent: calc(var(--rating) / 5 * 100%);
+    
+    display: inline-block;
+    font-size: var(--star-size2);
+    font-family: Times; // make sure ★ appears correctly
+    line-height: 1;
+    
+    &::before {
+      content: '★★★★★';
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  // rating area
+  .rating {
+    display: flex;
+    position: relative;
+    font-size: 30px;
+  }
+  
+  .rating label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    cursor: pointer;
+    letter-spacing: 3px;
+  }
+  
+  .rating label:last-child {
+    position: static;
+  }
+  
+  .rating label:nth-child(1) {
+    z-index: 5;
+  }
+  
+  .rating label:nth-child(2) {
+    z-index: 4;
+  }
+  
+  .rating label:nth-child(3) {
+    z-index: 3;
+  }
+  
+  .rating label:nth-child(4) {
+    z-index: 2;
+  }
+  
+  .rating label:nth-child(5) {
+    z-index: 1;
+  }
+  
+  .rating label input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    
+  }
+  
+  .rating label .icon {
+    float: left;
+    color: transparent;
+  }
+  
+  .rating label:last-child .icon {
+    color: #000;
+  }
+  
+  .rating:not(:hover) label input:checked ~ .icon,
+  .rating:hover label:hover input ~ .icon {
+    color: #fc0;
+  }
+  
+  .rating label input:focus:not(:checked) ~ .icon:last-child {
+    color: #000;
+    text-shadow: 0 0 5px #fc0;
+  }

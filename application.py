@@ -21,10 +21,6 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Set up json
-res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "lH3Sp0wTfhoxMdREQYZw", "isbns": "9781632168146"})
-# print(res.json())
-
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
@@ -48,11 +44,17 @@ def index():
 @app.route("/<int:id>")
 def book(id):
         
+    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": id}).fetchone()
     # error handling
     if not book:
         return render_template("index.html",  message="404. No such book with this ID :(")
 
-    return render_template("book_info.html",  book=book)
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "lH3Sp0wTfhoxMdREQYZw", "isbns": book['isbn']})
+    res=res.json()
+    rating = float(res['books'][0]['average_rating'])
+
+    
+    return render_template("book_info.html",  book=book, res=res, rating=rating)
     
 @app.route("/login", methods=["GET", "POST"])
 def login():

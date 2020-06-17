@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   background: #f9f7f4;
 }
@@ -77,5 +78,227 @@ footer a {
 
 .post_info h5 {
   font-size: 15px;
+}
+
+.book_info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.book_info-image {
+  width: 350px;
+  margin-right: 20px;
+}
+
+.book_info-image img {
+  width: 100%;
+}
+
+.book_info-heading {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: left;
+}
+
+.book_info-heading .rating-top {
+  font-size: 1.5em;
+  display: inline-block;
+}
+
+.book_info-reviews {
+  -webkit-box-shadow: 0px 15px 31px -6px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 15px 31px -6px rgba(0, 0, 0, 0.75);
+  margin-top: 20px;
+  border: 1px solid #f4f1ea;
+  margin-bottom: 30px;
+}
+
+.book_info-reviews h5 {
+  font-size: 1em;
+  background: #f4f1ea;
+  color: #58371f;
+  margin-bottom: 0;
+}
+
+.review_area {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.review_area-post {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 10px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.review_area-post .left-part {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.review_area-post .left-part .name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: right;
+}
+
+.review_area-post .left-part .text {
+  margin-left: 10px;
+  text-align: left;
+  width: 365px;
+}
+
+.review_area-post .time {
+  width: 190px;
+  font-size: 0.7em;
+}
+
+.text-area form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: 0;
+}
+
+.text-area form .inputs {
+  margin-left: 5px;
+}
+
+.text-area form .inputs .btn {
+  margin-left: 5px;
+  height: calc(2.25rem + 2px);
+  background: #f4f1ea;
+  color: #58371f;
+  font-weight: bold;
+}
+
+:root {
+  --star-size: 40px;
+  --star-size2: 30px;
+  --star-color: rgb(194, 194, 194);
+  --star-background: #fc0;
+}
+
+.Stars {
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  font-size: var(--star-size);
+  font-family: Times;
+  line-height: 1;
+}
+
+.Stars::before {
+  content: '★★★★★';
+  letter-spacing: 3px;
+  background: -webkit-gradient(linear, left top, right top, from(var(--star-background)), to(var(--star-color)));
+  background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.Stars2 {
+  --percent: calc(var(--rating) / 5 * 100%);
+  display: inline-block;
+  font-size: var(--star-size2);
+  font-family: Times;
+  line-height: 1;
+}
+
+.Stars2::before {
+  content: '★★★★★';
+  letter-spacing: 3px;
+  background: -webkit-gradient(linear, left top, right top, from(var(--star-background)), to(var(--star-color)));
+  background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rating {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  font-size: 30px;
+}
+
+.rating label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+  letter-spacing: 3px;
+}
+
+.rating label:last-child {
+  position: static;
+}
+
+.rating label:nth-child(1) {
+  z-index: 5;
+}
+
+.rating label:nth-child(2) {
+  z-index: 4;
+}
+
+.rating label:nth-child(3) {
+  z-index: 3;
+}
+
+.rating label:nth-child(4) {
+  z-index: 2;
+}
+
+.rating label:nth-child(5) {
+  z-index: 1;
+}
+
+.rating label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.rating label .icon {
+  float: left;
+  color: transparent;
+}
+
+.rating label:last-child .icon {
+  color: #000;
+}
+
+.rating:not(:hover) label input:checked ~ .icon,
+.rating:hover label:hover input ~ .icon {
+  color: #fc0;
+}
+
+.rating label input:focus:not(:checked) ~ .icon:last-child {
+  color: #000;
+  text-shadow: 0 0 5px #fc0;
 }
 /*# sourceMappingURL=styles.css.map */

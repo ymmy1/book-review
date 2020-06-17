@@ -4,6 +4,90 @@
 {% endblock %}
 
 {% block main %}
-    <h2>Welcome to {{  book['title'] }}</h2>
-    {{ book }}
+<div class="container book_info">
+    <div class="book_info-image">
+        <img src="https://covers.openlibrary.org/b/ISBN/{{ book['isbn'] }}-L.jpg" alt="{{ book['title'] }}">
+    </div>
+    <div class="book_info-description">
+        <div class="book_info-heading">
+            <h2 class="book_info-title">{{ book['title'] }} </h2>
+            <span>
+                <div class="Stars" style="--rating: {{ rating }};" aria-label="Rating of this product is {{ rating }} out of 5."></div>
+                <div class="rating-top">{{ res['books'][0]['average_rating'] }}</div>
+            </span>
+            <p>
+                <i>Number or ratings: {{ res['books'][0]['work_ratings_count'] }}</i>
+            </p>
+            <strong>Author: {{ book['author'] }}</strong>
+            <strong>Year: {{ book['year'] }}</strong>
+            <strong>International Serial Book Number: {{ book['isbn'] }}</strong>
+        </div>
+        <div class="book_info-reviews">
+            <h5>Book<strong>Review</strong></h5>
+            <div class="review_area">
+                <div class="review_area-post">
+                    <div class="left-part">
+                        <div class="name">
+                            <strong class="nickname"> Omar:</strong>
+                            <div class="Stars2" style="--rating: {{ rating }};" aria-label="Rating of this product is {{ rating }} out of 5."></div>
+                        </div>                    
+                        <p class="text"> I love this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfas</p>
+                    </div>
+                    <span class="right-part time"><i>2020/06/16 11:19.47 PM</i></span>
+                </div>
+                <div class="review_area-post">
+                    <div class="left-part">
+                        <div class="name">
+                            <strong class="nickname"> Omar:</strong>
+                            <div class="Stars2" style="--rating: {{ rating }};" aria-label="Rating of this product is {{ rating }} out of 5."></div>
+                        </div>                    
+                        <p class="text"> I love this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfas</p>
+                    </div>
+                    <span class="right-part time"><i>2020/06/16 11:19.47 PM</i></span>
+                </div>
+                <div class="text-area">
+                    <form class="" action="/comment" method="POST">
+                        <div class="rating">
+                            <label>
+                                <input type="radio" name="stars" value="1" />
+                                <span class="icon">★</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="2" checked="checked"/>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="3" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>   
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="4" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="5" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                            </label>
+                        </div>
+                        <div class="inputs">
+                            <input class="form-control" name="comment" placeholder="Type Comment" type="Text" maxlength="50" required>
+                            <button class="btn" type="submit">Post</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
