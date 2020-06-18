@@ -8,33 +8,11 @@
 
 <div class="feed">
     <h2>Found {{ total }} results..</h2>
-    <h5>Search by Title:</h5>
     {% if t_search %}
     <div class="search_feed">
         {% for row in t_search %}
             <div class="post">
-                <a href="/{{ row['id'] }}" class="post_link">
-                    <div class="post_image">
-                        <img src="https://covers.openlibrary.org/b/ISBN/{{ row['isbn'] }}-M.jpg" class="img-thumbnail" alt="{{ row['title'] }}">
-                    </div>
-                    <div class="post_info">
-                        <h5> {{ row['title'] }}</h5>
-                        <p>By {{ row['author'] }}</p>
-                        <p>Year: {{ row['year'] }}</p>
-                    </div>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
-    {% else %}
-        <p>Nothing found</p>
-    {% endif %}
-    <h5>Search by Author</h5>
-    {% if a_search %}
-    <div class="search_feed">
-        {% for row in a_search %}
-            <div class="post">
-                <a href="/{{ row['id'] }}" class="post_link">
+                <a href="/book/{{ row['isbn'] }}" class="post_link">
                     <div class="post_image">
                         <img src="https://covers.openlibrary.org/b/ISBN/{{ row['isbn'] }}-M.jpg" class="img-thumbnail" alt="{{ row['title'] }}">
                     </div>

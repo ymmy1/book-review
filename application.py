@@ -28,6 +28,8 @@ db = scoped_session(sessionmaker(bind=engine))
 # Creating users, books and reviews
 db.execute("CREATE TABLE IF NOT EXISTS users(id serial PRIMARY KEY NOT NULL,username VARCHAR (10) UNIQUE NOT NULL,nickname VARCHAR (10) UNIQUE NOT NULL,hash VARCHAR (150) NOT NULL)")
 db.execute("CREATE TABLE IF NOT EXISTS books(id serial PRIMARY KEY NOT NULL,isbn VARCHAR (10) UNIQUE NOT NULL,title VARCHAR (40) UNIQUE NOT NULL,author VARCHAR (40) NOT NULL,year INTEGER NOT NULL )")
+db.execute("CREATE TABLE IF NOT EXISTS comments(id serial PRIMARY KEY NOT NULL,isbn VARCHAR (10) NOT NULL, nickname VARCHAR (10) NOT NULL, stars SERIAL NOT NULL, comment TEXT NOT NULL, time TEXT NOT NULL)")
+
 db.commit()
 
 
@@ -41,20 +43,50 @@ def index():
 
     return render_template("index.html",  row1=row1, row2=row2) 
 
-@app.route("/<int:id>")
-def book(id):
+@app.route("/book/<isbn>", methods=['GET','POST'])
+def book(isbn):
+
+    if request.method == "POST":
+        stars = request.form.get("stars")
+        if not stars:
+            flash(u"Must select stars!", 'danger')
+            return redirect("/book/" + isbn)
         
-    book = db.execute("SELECT * FROM books WHERE id = :id", {"id": id}).fetchone()
+        comment = request.form.get("comment")
+        if not comment:
+            flash(u"Please type in a comment", 'danger')
+            return redirect("/book/" + isbn)
+        
+        status = db.execute("SELECT * FROM comments WHERE isbn = :isbn AND nickname = :nickname", {"isbn": isbn, "nickname": session["user_nickname"]}).fetchall()
+        
+        if status:
+            return apology("you already reviewed this book.")
+
+        db.execute("INSERT INTO comments (isbn, nickname, stars, comment, time) VALUES (:isbn, :nickname, :stars, :comment, now()::timestamp(0))",
+        {"isbn": isbn, "nickname": session["user_nickname"], "stars": stars, "comment": comment})
+        db.commit()
+
+        return redirect("/book/" + isbn)
+
+    book = db.execute("SELECT * FROM books WHERE(isbn = :isbn)", {"isbn": isbn}).fetchone()
     # error handling
     if not book:
-        return render_template("index.html",  message="404. No such book with this ID :(")
+        flash(u"404. No such book with this ID :(", 'danger')
+        return render_template("index.html")
 
+    # review check
+    status = db.execute("SELECT * FROM comments WHERE isbn = :isbn AND nickname = :nickname", {"isbn": book['isbn'], "nickname": session["user_nickname"]}).fetchall()
+    
+
+    # query for title api
     res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "lH3Sp0wTfhoxMdREQYZw", "isbns": book['isbn']})
     res=res.json()
     rating = float(res['books'][0]['average_rating'])
 
-    
-    return render_template("book_info.html",  book=book, res=res, rating=rating)
+    # query for book comments
+    comments = db.execute("SELECT * FROM comments WHERE isbn = :isbn ORDER BY id DESC", {"isbn": book['isbn']}).fetchall()
+
+    return render_template("book_info.html",  book=book, res=res, rating=rating, status=status, comments=comments)
     
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -68,11 +100,13 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            flash(u"Must provide username", 'danger')
+            return render_template("login.html")
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            flash(u"Must provide password", 'danger')
+            return render_template("login.html")
 
         # Query database for username
         username=request.form.get("username")
@@ -81,7 +115,8 @@ def login():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            flash(u"Invalid username and/or password", 'danger')
+            return render_template("login.html")
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -107,7 +142,8 @@ def register():
                             {"username": username}).fetchall()
 
     if len(rows) != 0 :
-        return apology("this username is taken :(", 403)
+        flash(u"This username is taken", 'danger')
+        return render_template('register.html')
 
     pas1 = request.form.get("password")
     pas2 = request.form.get("confirmPassword")
@@ -115,7 +151,8 @@ def register():
         # Reset passwords
         pas1 = ""
         pas2 = ""
-        return apology("passwords don't match", 403)
+        flash(u"Passwords don't match", 'danger')
+        return render_template('register.html')
 
     # Reset passwords
     pas1 = ""
@@ -126,7 +163,8 @@ def register():
                             {"nickname": nickname}).fetchall()
 
     if len(rows) != 0 :
-        return apology("this nickname is taken :(", 403)
+        flash(u'This nickname is taken :(', 'danger')
+        return render_template('register.html')
 
     password=generate_password_hash(request.form.get("password"))
     db.execute("INSERT INTO users (username, nickname, hash) VALUES(:username, :nickname, :password)",
@@ -134,7 +172,8 @@ def register():
     db.commit()
 
     # Redirect user to login page
-    return redirect("/login")
+    flash(u"Registered", 'success')
+    return render_template('login.html')
 
 @app.route("/logout")
 def logout():
@@ -152,9 +191,8 @@ def search():
     message = request.form.get("search")
     message = "".join(("%", message, "%"))
 
-    t_search = db.execute("SELECT * FROM books WHERE title ILIKE :msg", {"msg": message}).fetchall()
-    a_search = db.execute("SELECT * FROM books WHERE author ILIKE :msg", {"msg": message}).fetchall()
+    t_search = db.execute("SELECT * FROM books WHERE title ILIKE :msg OR author ILIKE :msg or isbn ILIKE :msg", {"msg": message}).fetchall()
 
     # Total number of books
-    total = int(len(t_search)) + int(len(a_search))
-    return render_template("search.html",   t_search=t_search, a_search=a_search, total=total)
+    total = int(len(t_search))
+    return render_template("search.html",   t_search=t_search, total=total)

@@ -25,28 +25,22 @@
         <div class="book_info-reviews">
             <h5>Book<strong>Review</strong></h5>
             <div class="review_area">
+                {% for comment in comments %}
                 <div class="review_area-post">
                     <div class="left-part">
                         <div class="name">
-                            <strong class="nickname"> Omar:</strong>
-                            <div class="Stars2" style="--rating: {{ rating }};" aria-label="Rating of this product is {{ rating }} out of 5."></div>
+                            <div class="Stars2" style="--rating: {{ comment['stars'] }};" aria-label="Rating of this product is {{ comment['stars'] }} out of 5."></div>
+                            <strong class="nickname"> {{ comment["nickname"] }}:</strong>
                         </div>                    
-                        <p class="text"> I love this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfas</p>
+                        <p class="text">{{ comment['comment'] }}</p>
                     </div>
-                    <span class="right-part time"><i>2020/06/16 11:19.47 PM</i></span>
+                    <span class="right-part time"><i>{{ comment['time'] }}</i></span>
                 </div>
-                <div class="review_area-post">
-                    <div class="left-part">
-                        <div class="name">
-                            <strong class="nickname"> Omar:</strong>
-                            <div class="Stars2" style="--rating: {{ rating }};" aria-label="Rating of this product is {{ rating }} out of 5."></div>
-                        </div>                    
-                        <p class="text"> I love this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfasove this book to asdfasdfasdfas</p>
-                    </div>
-                    <span class="right-part time"><i>2020/06/16 11:19.47 PM</i></span>
-                </div>
+                {% endfor %}
                 <div class="text-area">
-                    <form class="" action="/comment" method="POST">
+                    {% if not status %}
+                    
+                    <form class="" method="POST">
                         <div class="rating">
                             <label>
                                 <input type="radio" name="stars" value="1" />
@@ -81,9 +75,13 @@
                         </div>
                         <div class="inputs">
                             <input class="form-control" name="comment" placeholder="Type Comment" type="Text" maxlength="50" required>
+                            <input class="hidden" name="isbn" placeholder="Type Comment" type="Text" maxlength="50" value="{{ book['isbn'] }}" required> 
                             <button class="btn" type="submit">Post</button>
                         </div>
                     </form>
+                    {% else %}
+                    <p>Thank you for leaving a review!😄</p>
+                    {% endif %}
                 </div>
             </div>
 

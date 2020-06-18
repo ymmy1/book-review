@@ -66,11 +66,20 @@ footer a {
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.post {
+  margin: 10px;
+  -webkit-box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.51);
+  box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.51);
+  background: #f4f1ea;
 }
 
 .post_info {
   margin: auto;
-  background: rgba(250, 250, 250, 0.8);
   width: 100px;
   font-size: 12px;
   text-align: center;
@@ -112,8 +121,8 @@ footer a {
 }
 
 .book_info-reviews {
-  -webkit-box-shadow: 0px 15px 31px -6px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 15px 31px -6px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 15px 31px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 15px 31px -10px rgba(0, 0, 0, 0.75);
   margin-top: 20px;
   border: 1px solid #f4f1ea;
   margin-bottom: 30px;
@@ -126,6 +135,24 @@ footer a {
   margin-bottom: 0;
 }
 
+@media only screen and (max-width: 1200px) {
+  .book_info {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .book_info-image {
+    margin: 0;
+  }
+  .book_info-heading {
+    text-align: center;
+  }
+}
+
 .review_area {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -135,6 +162,7 @@ footer a {
       -ms-flex-direction: column;
           flex-direction: column;
   background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
 }
 
 .review_area-post {
@@ -157,10 +185,10 @@ footer a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+      -ms-flex-direction: row;
+          flex-direction: row;
   text-align: right;
 }
 
@@ -194,9 +222,55 @@ footer a {
   font-weight: bold;
 }
 
+.text-area form .inputs .hidden {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .review_area-post {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .review_area-post .left-part {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .review_area-post .left-part .name {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    text-align: center;
+  }
+  .review_area-post .left-part .text {
+    margin: auto;
+    text-align: center;
+    width: 300px;
+  }
+  .review_area-post .time {
+    margin: auto;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .text-area form {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
+  }
+  .text-area form .rating {
+    margin: auto;
+  }
+}
+
 :root {
   --star-size: 40px;
-  --star-size2: 30px;
+  --star-size2: 20px;
   --star-color: rgb(194, 194, 194);
   --star-background: #fc0;
 }
