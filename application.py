@@ -44,6 +44,7 @@ def index():
     return render_template("index.html",  row1=row1, row2=row2) 
 
 @app.route("/book/<isbn>", methods=['GET','POST'])
+@login_required
 def book(isbn):
 
     if request.method == "POST":
@@ -186,6 +187,7 @@ def logout():
     return redirect("/")
 
 @app.route("/search", methods=["POST"])
+@login_required
 def search():
     # requesting the text from search
     message = request.form.get("search")
@@ -196,3 +198,13 @@ def search():
     # Total number of books
     total = int(len(t_search))
     return render_template("search.html",   t_search=t_search, total=total)
+
+@app.route("/api/<isbn>")
+@login_required
+def json(isbn):
+    api = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "lH3Sp0wTfhoxMdREQYZw", "isbns": isbn})
+    if not api:
+        return "Error no such book with this isbn."
+    
+    api=api.json()
+    return api
