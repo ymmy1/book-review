@@ -202,9 +202,24 @@ def search():
 @app.route("/api/<isbn>")
 @login_required
 def json(isbn):
-    api = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "lH3Sp0wTfhoxMdREQYZw", "isbns": isbn})
-    if not api:
+    
+    
+    data = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
+    review_count = db.execute("SELECT COUNT(*) FROM comments WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    average_score = db.execute("SELECT AVG(stars) FROM comments WHERE isbn =:isbn", {"isbn": isbn}).fetchone()
+    
+    if not data:
         return "Error no such book with this isbn."
     
-    api=api.json()
-    return api
+
+    result = dict(
+        title = data[0]["title"],
+        author = data[0]["author"],
+        year = int(data[0]["year"]),
+        isbn = data[0]["isbn"],
+        review_count = review_count[0],
+        average_score = float('%.2f'%(average_score[0]))
+    )
+
+    return result
+    # return render_template("apology.html", result=result)
