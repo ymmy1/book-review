@@ -205,21 +205,22 @@ def json(isbn):
     
     
     data = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
-    review_count = db.execute("SELECT COUNT(*) FROM comments WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
-    average_score = db.execute("SELECT AVG(stars) FROM comments WHERE isbn =:isbn", {"isbn": isbn}).fetchone()
-    
     if not data:
         return "Error no such book with this isbn."
-    
+    review_count = db.execute("SELECT COUNT(*) FROM comments WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    average_score = db.execute("SELECT AVG(stars) FROM comments WHERE isbn =:isbn", {"isbn": isbn}).fetchone()
 
     result = dict(
         title = data[0]["title"],
         author = data[0]["author"],
         year = int(data[0]["year"]),
         isbn = data[0]["isbn"],
-        review_count = review_count[0],
-        average_score = float('%.2f'%(average_score[0]))
-    )
+        review_count = review_count[0]
+)
 
+    if not average_score[0]:
+            result["average_score"] = 0.00
+    else:
+        result["average_score"] = float('%.2f'%(average_score[0]))
     return result
     # return render_template("apology.html", result=result)
