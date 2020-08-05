@@ -5,7 +5,7 @@
 
 ## Use the app on Heroku
 
-### https://cs50w--book-review.herokuapp.com/
+### https://bookreview-ymmy.herokuapp.com/
 
 
 ![](https://i.imgur.com/Njv1nqB.png)
